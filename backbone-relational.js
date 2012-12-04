@@ -7,24 +7,24 @@
  * For details and documentation: https://github.com/PaulUithol/Backbone-relational.
  * Depends on Backbone (and thus on Underscore as well): https://github.com/documentcloud/backbone.
  */
-( function( undefined ) {
+ (function(root, factory) {
+  // Set up Backbone-relational appropriately for the environment.
+  if (typeof exports !== 'undefined') {
+    // Node/CommonJS
+    var Backbone = require('backbone');
+    factory(root, Backbone, require('underscore'), Backbone);
+  } else if (typeof define === 'function' && define.amd) {
+    // AMD
+    define(['underscore', 'backbone'], function(_, Backbone) {
+      return factory(root, Backbone, _, Backbone);
+    });
+  } else {
+    // Browser globals
+    factory(root, root, root._, root.Backbone);
+  }
+}(this, function(root, exports, _, Backbone) {
 	"use strict";
 	
-	/**
-	 * CommonJS shim
-	 **/
-	var _, Backbone, exports;
-	if ( typeof window === 'undefined' ) {
-		_ = require( 'underscore' );
-		Backbone = require( 'backbone' );
-		exports = module.exports = Backbone;
-	}
-	else {
-		_ = window._;
-		Backbone = window.Backbone;
-		exports = window;
-	}
-
 	Backbone.Relational = {
 		showWarnings: true
 	};
@@ -1734,4 +1734,6 @@
 
 		return child;
 	};
-})();
+    
+    return Backbone;
+}));
